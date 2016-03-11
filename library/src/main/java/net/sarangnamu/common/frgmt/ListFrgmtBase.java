@@ -24,6 +24,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.ButterKnife;
+
 /**
  * @author <a href="mailto:aucd29@gmail.com">Burke Choi</a>
  */
@@ -33,6 +35,8 @@ public abstract class ListFrgmtBase extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBaseView = inflate(getLayoutId());
+        ButterKnife.bind(this, mBaseView);
+
         initLayout();
 
         return mBaseView;

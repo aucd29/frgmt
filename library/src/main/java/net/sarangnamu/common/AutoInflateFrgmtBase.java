@@ -51,11 +51,13 @@ public abstract class AutoInflateFrgmtBase extends FrgmtBase {
 
     private void autoInflate() {
         int id = getLayoutIdentifier();
-        StringBuilder log = new StringBuilder();
-        log.append("===================================================================\n");
-        log.append("inflate id : " + id + "\n");
-        log.append("===================================================================\n");
-        mLog.debug(log.toString());
+        if (mLog.isDebugEnabled()) {
+            StringBuilder log = new StringBuilder();
+            log.append("===================================================================\n");
+            log.append("inflate id : " + id + "\n");
+            log.append("===================================================================\n");
+            mLog.debug(log.toString());
+        }
 
         // base <- pageContent <- other View (class_name.xml)
         mPageContent = (ViewGroup) mBaseView.findViewById(getPageContentId());
@@ -99,11 +101,14 @@ public abstract class AutoInflateFrgmtBase extends FrgmtBase {
 
     protected int getLayoutIdentifier() {
         String layoutFileName = getPrefixForPage() + getClassSimpleName();
-        StringBuilder log = new StringBuilder();
-        log.append("===================================================================\n");
-        log.append("layoutName" + layoutFileName + "\n");
-        log.append("===================================================================\n");
-        mLog.debug(log.toString());
+
+        if (mLog.isDebugEnabled()) {
+            StringBuilder log = new StringBuilder();
+            log.append("===================================================================\n");
+            log.append("layoutName" + layoutFileName + "\n");
+            log.append("===================================================================\n");
+            mLog.debug(log.toString());
+        }
 
         return getResources().getIdentifier(layoutFileName, IDENTIFIER_LAYOUT,
                 getActivity().getPackageName());

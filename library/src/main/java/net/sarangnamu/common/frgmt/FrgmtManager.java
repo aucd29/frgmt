@@ -166,7 +166,7 @@ public abstract class FrgmtManager {
     }
 
     protected void setTransition(FragmentTransaction trans) {
-        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+//        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
     }
 
     protected void setSlideTransition(FragmentTransaction trans) {
@@ -199,5 +199,13 @@ public abstract class FrgmtManager {
         }
 
         return mFrgmtManager.findFragmentByTag(cls.getName());
+    }
+
+    public int getChildCount() {
+        if (mFrgmtManager == null) {
+            return 0;
+        }
+
+        return mFrgmtManager.getBackStackEntryCount();
     }
 }

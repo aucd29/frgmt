@@ -23,6 +23,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.ButterKnife;
+
 /**
  * @author <a href="mailto:aucd29@gmail.com">Burke Choi</a>
  */
@@ -32,6 +34,7 @@ public abstract class FrgmtBase extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBaseView = (ViewGroup) inflate(getLayoutId());
+        ButterKnife.bind(this, mBaseView);
         initLayout();
 
         return mBaseView;
