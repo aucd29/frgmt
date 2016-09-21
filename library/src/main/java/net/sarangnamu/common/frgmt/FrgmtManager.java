@@ -86,10 +86,10 @@ public abstract class FrgmtManager {
     }
 
     public void add(int id, Class<?> cls) {
-        add(id, cls, false);
+        add(id, cls, null);
     }
 
-    public void add(int id, Class<?> cls, boolean transition) {
+    public void add(int id, Class<?> cls, TransitionListener listener) {
         try {
             Fragment frgmt = (Fragment) cls.newInstance();
             if (frgmt == null) {
@@ -102,8 +102,8 @@ public abstract class FrgmtManager {
                 return;
             }
 
-            if (transition) {
-                setTransition(trans);
+            if (listener != null) {
+                listener.onEvent(trans);
             }
 
             trans.add(id, frgmt, frgmt.getClass().getName());
@@ -114,18 +114,26 @@ public abstract class FrgmtManager {
     }
 
     public void resetAdd(int id, Class<?> cls) {
-        replace(id, cls, false, null);
+        replace(id, cls, false, null, null);
     }
 
     public Fragment replace(int id, Class<?> cls) {
-        return replace(id, cls, true, null);
+        return replace(id, cls, true, null, null);
+    }
+
+    public Fragment replace(int id, Class<?> cls, TransitionListener listener) {
+        return replace(id, cls, true, null, listener);
     }
 
     public Fragment replace(int id, Class<?> cls, Bundle bundle) {
-        return replace(id, cls, true, bundle);
+        return replace(id, cls, true, bundle, null);
     }
 
-    private Fragment replace(int id, Class<?> cls, boolean stack, Bundle bundle) {
+    public Fragment replace(int id, Class<?> cls, Bundle bundle, TransitionListener listener) {
+        return replace(id, cls, true, bundle, listener);
+    }
+
+    private Fragment replace(int id, Class<?> cls, boolean stack, Bundle bundle, TransitionListener listener) {
         try {
             Fragment frgmt = mFrgmtManager.findFragmentByTag(cls.getName());
             FragmentTransaction trans = mFrgmtManager.beginTransaction();
@@ -145,7 +153,11 @@ public abstract class FrgmtManager {
             }
 
             if (stack) {
-                setTransition(trans);
+                if (listener != null) {
+                    listener.onEvent(trans);
+                } else {
+                    setTransition(trans);
+                }
             }
 
             trans.replace(id, frgmt, frgmt.getClass().getName());
@@ -197,11 +209,11 @@ public abstract class FrgmtManager {
                 R.anim.slide_down_current, R.anim.slide_down_prev);
     }
 
-    protected void setHalfSlideTransition(FragmentTransaction trans) {
-        // TODO
-        trans.setCustomAnimations(R.anim.slide_in_current_half, 0,
-                0, 0);
-    }
+//    protected void setHalfSlideTransition(FragmentTransaction trans) {
+//        // TODO
+//        trans.setCustomAnimations(R.anim.slide_in_current_half, 0,
+//                0, 0);
+//    }
 
     public Fragment getCurrentFragment() {
         if (mFrgmtManager == null) {
@@ -231,5 +243,15 @@ public abstract class FrgmtManager {
         }
 
         return mFrgmtManager.getBackStackEntryCount();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Transition Callback
+    //
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    public interface TransitionListener {
+        void onEvent(FragmentTransaction trans);
     }
 }
