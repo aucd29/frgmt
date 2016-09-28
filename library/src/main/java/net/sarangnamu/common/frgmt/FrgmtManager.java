@@ -103,7 +103,7 @@ public abstract class FrgmtManager {
             }
 
             if (listener != null) {
-                listener.onEvent(trans);
+                listener.onEvent(this, trans);
             }
 
             trans.add(id, frgmt, frgmt.getClass().getName());
@@ -154,7 +154,7 @@ public abstract class FrgmtManager {
 
             if (stack) {
                 if (listener != null) {
-                    listener.onEvent(trans);
+                    listener.onEvent(this, trans);
                 } else {
                     setTransition(trans);
                 }
@@ -194,17 +194,18 @@ public abstract class FrgmtManager {
         }
     }
 
+    @Deprecated
     protected void setTransition(FragmentTransaction trans) {
         // TODO
 //        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
     }
 
-    protected void setSlideTransition(FragmentTransaction trans) {
+    public void setSlideTransition(FragmentTransaction trans) {
         trans.setCustomAnimations(R.anim.slide_in_current, R.anim.slide_in_next,
                 R.anim.slide_out_current, R.anim.slide_out_prev);
     }
 
-    protected void setUpTransition(FragmentTransaction trans) {
+    public void setUpTransition(FragmentTransaction trans) {
         trans.setCustomAnimations(R.anim.slide_up_current, R.anim.slide_up_next,
                 R.anim.slide_down_current, R.anim.slide_down_prev);
     }
@@ -252,6 +253,6 @@ public abstract class FrgmtManager {
     ////////////////////////////////////////////////////////////////////////////////////
 
     public interface TransitionListener {
-        void onEvent(FragmentTransaction trans);
+        void onEvent(FrgmtManager manager, FragmentTransaction trans);
     }
 }
