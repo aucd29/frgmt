@@ -23,7 +23,7 @@ package net.sarangnamu.common;
 public abstract class InflateFrgmtBase extends FrgmtBase {
     private static final org.slf4j.Logger mLog = org.slf4j.LoggerFactory.getLogger(InflateFrgmtBase.class);
 
-    protected static final String PREFIX_PAGE         = "page_";
+    protected static final String PREFIX_PAGE         = "view_";
     protected static final String SUFFIX_FRAGMENT     = "Frgmt";
     protected static final String IDENTIFIER_LAYOUT   = "layout";
 
@@ -63,6 +63,11 @@ public abstract class InflateFrgmtBase extends FrgmtBase {
         mParseClassName = sb.toString();
 
         return mParseClassName;
+    }
+
+    @Override
+    protected String getDefalutViewMessage() {
+        return super.getDefalutViewMessage() + "\n(File not found '" + getClassSimpleName() + ".xml')";
     }
 
     protected String getPrefixForPage() {

@@ -20,9 +20,12 @@ package net.sarangnamu.common;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import butterknife.ButterKnife;
 
@@ -34,8 +37,13 @@ public abstract class FrgmtBase extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        mBaseView = (ViewGroup) inflater.inflate(getLayoutId(), container, false);
-        mBaseView = inflate(getLayoutId(), container);
+        int id = getLayoutId();
+        if (id == 0) {
+            mBaseView = makeDefaultView();
+        } else {
+            mBaseView = inflate(getLayoutId(), container);
+        }
+
         mBaseView.setBackgroundColor(0xffffffff);
         mBaseView.setClickable(true);
 
@@ -55,6 +63,31 @@ public abstract class FrgmtBase extends Fragment {
 
     protected ViewGroup inflate(@LayoutRes int resid, ViewGroup container) {
         return (ViewGroup) LayoutInflater.from(getContext()).inflate(resid, container, false);
+    }
+
+    /**
+     * getLayoutId 의 값이 invalid 하면 현재 클래스 명을 가운데로 출력하는 형태로 만들어주자
+     * @return
+     */
+    protected ViewGroup makeDefaultView() {
+        LinearLayout layout = new LinearLayout(getActivity());
+        layout.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+        ));
+        layout.setGravity(Gravity.CENTER);
+
+        TextView text = new TextView(getActivity());
+        text.setText(getDefalutViewMessage());
+        text.setGravity(Gravity.CENTER);
+
+        layout.addView(text);
+
+        return layout;
+    }
+
+    protected String getDefalutViewMessage() {
+        return getClass().getSimpleName();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////
